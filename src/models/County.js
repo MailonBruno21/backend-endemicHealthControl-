@@ -9,10 +9,6 @@ const countySchema = new mongoose.Schema(
         uf: {
             type: String,
             required: true
-        },
-        dateCreate: {
-            type: Date,
-            required: true
         }
     },
 
@@ -20,3 +16,5 @@ const countySchema = new mongoose.Schema(
         timestamps: true
     }
 )
+
+export default mongoose.model('County', countySchema)

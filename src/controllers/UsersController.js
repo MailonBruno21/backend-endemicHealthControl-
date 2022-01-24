@@ -1,11 +1,14 @@
-import County from "../models/County"
+import User from "../models/User"
 
 
-class CountyController {
+
+
+class UsersControllers{
+
     async index(req, res){
         try {
-            const county = await County.find()
-            return res.status(201).json(county)
+            const user = await User.find()
+            return res.status(201).json(user)
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: "Internal server error." })
@@ -16,12 +19,12 @@ class CountyController {
 
         try {
             const { id } = req.params
-            const county = await County.findById(id)
+            const user = await User.findById(id)
 
-            if(!county){
+            if(!user){
                 return res.status(404).json()
             }
-            return res.status(201).json(county)
+            return res.status(201).json(user)
 
         } catch (error) {
             console.error(error);
@@ -31,21 +34,21 @@ class CountyController {
 
     async create(req, res){
         try{
-            const { name, uf, registrationDate } = req.body
+            const { nome, email, phoneNumber, cpf, password, registrationDate, bithDate, admin, agent } = req.body
             
             
-            const county = await County.findOne({ name })
+            const user = await User.findOne({$or: [{ cpf, email }]})
             
-            if (county) {
-                return res.status(422).json({ message: `County ${name} already exists.` })
+            if (user) {
+                return res.status(422).json({ message: `User ${email} already exists.` })
             }
             
 
             //CRIPTOGRAFAR SENHA
 
-            const newCounty = await County.create({name, uf, registrationDate})
+            const newUser = await User.create({nome, email, phoneNumber, cpf, password, registrationDate, bithDate, admin, agent})
 
-            return res.status(201).json(newCounty)
+            return res.status(201).json(newUser)
 
         }catch (error){
             console.error(error);
@@ -56,17 +59,17 @@ class CountyController {
     async update(req, res){
         try{
             const { id } = req.params
-            const { name, uf, registrationDate } = req.body
+            const {  nome, email, phoneNumber, cpf, password, bithDate, admin, agent } = req.body
 
-            const county = await County.findById(id)
+            const user = await User.findById(id)
 
-            if(!county){
+            if(!user){
                 return res.status(404).json()
             }
 
             //CRIPTOGRAFAR SENHA
 
-            await County.updateOne({ name, uf, registrationDate })
+            await user.updateOne({ nome, email, phoneNumber, cpf, password, bithDate, admin, agent})
 
             return res.status(200).json()
             
@@ -79,13 +82,13 @@ class CountyController {
     async delete(req, res){
         try{
             const { id } = req.params
-            const county = await County.findById(id)
+            const user = await User.findById(id)
 
-            if(!county){
+            if(!user){
                 return res.status(404).json()
             }
 
-            await County.deleteOne()
+            await user.deleteOne()
             
             return res.status(200).json()
         }catch(err){
@@ -95,4 +98,5 @@ class CountyController {
     }
 }
 
-export default new CountyController()
+
+export default new UsersControllers()

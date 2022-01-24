@@ -22,15 +22,22 @@ const userSchema = new mongoose.Schema(
             type: String,
             require: true
         },
-        registrationDate:{
-            type: Date,
-            require: true
-        },
         bithDate: {
             type: Date,
             require: true
+        },
+        admin: {
+            type: Boolean,
+            required: true
+        },
+        agent: {
+            type: Boolean,
+            required: true
         }
+    },
+    {
+        timestamps: true
     }
 )
 
-export default mongoose.model('AdminUser', userSchema)
+export default mongoose.model('User', userSchema)
